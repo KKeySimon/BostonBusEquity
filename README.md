@@ -42,7 +42,7 @@ Arrival & Departure Times By Year
 
   - Linear regression model to identify factors that influence travel times.
   - Time series model like ARIMA to forecast travel time trends
-  - K-Means clustering to group routes with similar travel time distributions and identify routes with high variability in travel time.
+  - K-Means clustering that has X, Y map coordinates and a Z coordinate that contains lateness. This will allow us to identify hot spots of lateness or on-timeliness using K-Means
 
 - Are there disparities in the service levels of different routes (which lines are late more often than others)?
   - K-Means clustering to determine which areas have the most lateness or disparities in service levels
