@@ -48,6 +48,30 @@ Again, the data above is from 2024 only as the time it would take to process all
 
 ### Detailed description of data modeling methods used so far.
 
-The Spark prompt has little to no mentions of using modeling the data, but data modeling will be done for the purpose of this class. The data to be obtained from model can also be very beneficial in predicting future bus delays.
+Since we weren't given a explicit means to model our data, we'll be taking creative liberties on what type of model we should use. We could have used one of many different ideas such as prediciting the next delay for a bus stop given a certain number of previous delays, but given the nature of the project, we can look to identify areas that could use more attention by the MBTA to promote equity. One of the main ways to do this is by identifying areas and stops in Boston that are disproportionately affected by poor bus service. By looking at groups of stops, we can focus on areas that are being affected rather than one-off stops with poor service. We can use clustering such as KMeans or DBScan to see which areas have unusually poor service.
+
+We approached this by first using KMeans without any form of normalization. The features included the average lateness, longitude, and latitude. Since the data isn't normalized, the lateness is the only thing that becomes the focus as lateness ranges from -300 to 300 while latitude and longitutde stayed within 41 to 42 and -71 to -72. This can be shown below.
+
+![K-Means No Normalization](kmeans_no_normalization.png)
+
+We then try adding normalization to ensure that location is being factored and we can see that the clusters begin to actually factor in distance. We also add the elbow method by looking at different cost functions after applying different number of clusters. We then decided that 7 clusters was the best choice. The 2 graphs below demonstrate this.
+
+![Elbow Method for Optimal K](elbow_method.png)
+
+![K-Means Normalization](kmeans_normalization.png)
+
+We then did the same with DBScan. The parameters were picked by looking for clusters that would have high average_lateness and non-trivial amount of stops. By manually messing around with the epsilon and min_samples parameter, we landed on 0.2 and 7 respectively.
+
+![DBScan Clustering](dbscan_clustering.png)
 
 ### Preliminary results. (e.g. we fit a linear model to the data and we achieve promising results, or we did some clustering and we notice a clear pattern in the data)
+
+After obtaining both DBScan & KMeans, we noticed that the cluster with the most amount of lateness resided in similar spots and used ArcGIS to determine where this actually was on the map.
+
+Below are the KMeans and DBScan results. We see that areas that have high levels of lateness identified by both DBScan and KMeans
+
+![KMeans](KMeans.png)
+
+![DBScan](DBScan.png)
+
+From immediate observations, we notice from our results that the southern area of Boston has the most delays in bus stops. Any outlier from DBScan is also included within KMeans. There could be multiple factors that contribute to this. More people could have cars in this side of Boston that cause traffic jams, people from Southern Boston commute to central Boston more than the North. It s hard to tell from the data here alone, and we'll need to combine with our census data to get a better understanding of what the data here could mean.
