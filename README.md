@@ -18,7 +18,33 @@ We then decided to graph the new formatted data that was now fixed. We still see
 
 ![Lateness Over Time Graph](lateness_over_time_v2.png)
 
-We then created a new csv looking for the outlier rows which showed that these outliers and we see they are from the same station back to back. But the intervals between the actual bus time arrivals are the same as the intervals between expected bus time arrivals. We believe that this is most likely some announced shift in the schedule that was not reflected in the spreadsheet. We decided to put an arbitrary threshold of 3600 seconds (1 hour) of lateness or earliness. After we had removed obvious outliers from our dataset, we were able to display it onto [ARCGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=9f60b58427e94c3991bba8cbce9f61ff). The map has a time series player as well and although we've only added 2024 data, the process can be extended to any other year.
+We then created a new csv looking for the outlier rows which showed that these outliers and we see they are from the same station back to back. But the intervals between the actual bus time arrivals are the same as the intervals between expected bus time arrivals. We believe that this is most likely some announced shift in the schedule that was not reflected in the spreadsheet. We decided to put an arbitrary threshold of 3600 seconds (1 hour) of lateness or earliness. After we had removed obvious outliers from our dataset, we ended up with the a visualization of the data that looked like the graph below.
+
+![Lateness Over Time](lateness_over_time_v3.png)
+
+We felt the the data looked good enough that we were able to display it onto [ARCGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=9f60b58427e94c3991bba8cbce9f61ff). The map has a time series player as well and although we've only added 2024 data, the process can be extended to any other year.
+
+We were also able to answer some the questions asked in our initial project proposal such as what is the city wide average lateness which happened to be around 263 seconds late. We were also able to see the average lateness for the target routes asked from the proposal.
+
+| Route ID | Average Lateness (seconds) |
+| -------- | -------------------------- |
+| 111      | 194.24                     |
+| 14       | 292.64                     |
+| 15       | 269.35                     |
+| 17       | 364.53                     |
+| 22       | 380.97                     |
+| 23       | 373.58                     |
+| 24       | 375.41                     |
+| 26       | 154.65                     |
+| 28       | 446.06                     |
+| 29       | 470.34                     |
+| 31       | 258.83                     |
+| 33       | 181.59                     |
+| 42       | 313.53                     |
+| 44       | 403.23                     |
+| 45       | 361.81                     |
+
+Again, the data above is from 2024 only as the time it would take to process all the datasets would take a while. But we felt that since this is a midterm report, we can show the result for one year and then process all the data during the final presentation.
 
 ### Detailed description of data modeling methods used so far.
 
