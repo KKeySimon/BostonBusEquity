@@ -1,87 +1,77 @@
-# Boston Bus Equity Project
+# Midterm Report & Presentation
 
-## Description of the project:
+## MBTA Bus Arrival Departure Dataset
 
-### We’d like to work on the MBTA Bus Equity Spark! Project.
+### Basic Introduction of Datasets
 
-The goal of this project is to better understand the impact of bus performance on Boston residents by using MBTA bus data to examine service performance trends by geography.
+We have access to the expected and actual arrival data everyday from the year 2018-2025. The detail of the data is in minute accuracy and provides a lot of detailed information.
 
-### We will be answering these 4 main questions proposed by the Spark! team.
+### Preliminary visualizations of data & Detailed description of data processing done so far
 
-- What is the ridership per bus route? How has this changed from pre-pandemic to post-pandemic time?
-- What are the end-to-end travel times for each bus route in the city?
-  - On average, how long does an individual have to wait for a bus (on time vs. delayed)?
-  - What is the average delay time of all routes across the entire city?
-  - What is the average delay time of the target bus routes (22, 29, 15, 45, 28, 44, 42, 17, 23, 31, 26, 111, 24, 33, 14 - from Livable Streets report)?
-- Are there disparities in the service levels of different routes (which lines are late more often than others)?
-  - If there are service level disparities, are there differences in the characteristics of the people most impacted (e.g. race, ethnicity, age, income, etc.)?
-- Can we chart changes over TIME?
-  - Compare the results from 2015-2017 to the most recent survey
+A lot of the data processing was a direct consequence by looking at visualizations of data. For example, we later mention how date and time is formatted in the dataset. The format of the data was in DATE (i.e. 2024-01-07) with an included scheduled and actual stop TIME (formatted in 1900-01-01T00:00:04:00Z). The initial dataset was merged to slice off the 1900-01-01 and append the date to the time. But this proved to be inaccurate and was found thanks to visualizations when we visualized lateness over time.
 
-## What data needs to be collected and how you will collect it (e.g. scraping xyz website or polling students).
+![Lateness Over Time V1](lateness_over_time_v1.png)
 
-We will be using these 3 data points
+The graph above showed very weird consistent pattern of outliers. After writing down these outliers in a csv, we see that the outlier values were around 86400, which is equivalent to being one day late. By visualizing our data, we were easily able to find taht sometimes, if the expected and actual dates are different, the data is formatted so that the day that comes after is formatted as (1900-01-02T00:00:00z).
 
-Arrival & Departure Times 2024
+We then decided to graph the new formatted data that was now fixed. We still see there are outliers and that there are mutliple outliers back to back as shown in the graph below.
 
-- https://gis.data.mass.gov/datasets/96c77138c3144906bce93d0257531b6a/about
+![Lateness Over Time Graph](lateness_over_time_v2.png)
 
-Ridership by Trip, Season, Route/Line, Stop
+We then created a new csv looking for the outlier rows which showed that these outliers and we see they are from the same station back to back. But the intervals between the actual bus time arrivals are the same as the intervals between expected bus time arrivals. We believe that this is most likely some announced shift in the schedule that was not reflected in the spreadsheet. We decided to put an arbitrary threshold of 3600 seconds (1 hour) of lateness or earliness. After we had removed obvious outliers from our dataset, we ended up with the a visualization of the data that looked like the graph below.
 
-- https://mbta-massdot.opendata.arcgis.com/datasets/eec03d901d2e470ebd5758c60d793e8e_0/explore
+![Lateness Over Time](lateness_over_time_v3.png)
 
-Arrival & Departure Times By Year
+We felt the the data looked good enough that we were able to display it onto [ARCGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=9f60b58427e94c3991bba8cbce9f61ff). The map has a time series player as well and although we've only added 2024 data, the process can be extended to any other year.
 
-- https://mbta-massdot.opendata.arcgis.com/search?collection=dataset&q=mbta%20bus%20arrival%20departure%20time
+We were also able to answer some the questions asked in our initial project proposal such as what is the city wide average lateness which happened to be around 263 seconds late. We were also able to see the average lateness for the target routes asked from the proposal.
 
-## How you plan on modeling the data (e.g. clustering, fitting a linear model, decision trees, XGBoost, some sort of deep learning method, etc.).
+| Route ID | Average Lateness (seconds) |
+| -------- | -------------------------- |
+| 111      | 194.24                     |
+| 14       | 292.64                     |
+| 15       | 269.35                     |
+| 17       | 364.53                     |
+| 22       | 380.97                     |
+| 23       | 373.58                     |
+| 24       | 375.41                     |
+| 26       | 154.65                     |
+| 28       | 446.06                     |
+| 29       | 470.34                     |
+| 31       | 258.83                     |
+| 33       | 181.59                     |
+| 42       | 313.53                     |
+| 44       | 403.23                     |
+| 45       | 361.81                     |
 
-- What is the ridership per bus route? How has this changed from pre-pandemic to post-pandemic time?
-  - The ridership per bus route in general saw declines across the board after the pandemic. For the bus stops who held relatively low numbers of riders previous to COVID, they remained low, but the stops that were more popular certainly saw a decline in riders post pandemic.
-- What are the end-to-end travel times for each bus route in the city?
+Again, the data above is from 2024 only as the time it would take to process all the datasets would take a while. But we felt that since this is a midterm report, we can show the result for one year and then process all the data during the final presentation.
 
-  - Linear regression model to identify factors that influence travel times.
-  - Time series model like ARIMA to forecast travel time trends
-  - K-Means clustering that has X, Y map coordinates and a Z coordinate that contains lateness. This will allow us to identify hot spots of lateness or on-timeliness using K-Means
+### Detailed description of data modeling methods used so far.
 
-- Are there disparities in the service levels of different routes (which lines are late more often than others)?
-  - K-Means clustering to determine which areas have the most lateness or disparities in service levels
-- Can we chart changes over TIME?
-  - Charting data changes over time doesn’t require predictions and therefore doesn’t need modeling.
+Since we weren't given a explicit means to model our data, we'll be taking creative liberties on what type of model we should use. We could have used one of many different ideas such as prediciting the next delay for a bus stop given a certain number of previous delays, but given the nature of the project, we can look to identify areas that could use more attention by the MBTA to promote equity. One of the main ways to do this is by identifying areas and stops in Boston that are disproportionately affected by poor bus service. By looking at groups of stops, we can focus on areas that are being affected rather than one-off stops with poor service. We can use clustering such as KMeans or DBScan to see which areas have unusually poor service.
 
-## How we plan on visualizing the data:
+We approached this by first using KMeans without any form of normalization. The features included the average lateness, longitude, and latitude. Since the data isn't normalized, the lateness is the only thing that becomes the focus as lateness ranges from -300 to 300 while latitude and longitutde stayed within 41 to 42 and -71 to -72. This can be shown below.
 
-- What is the ridership per bus route? How has this changed from pre-pandemic to post-pandemic time?
-  - Group up data points to represent broader time frames, determining average ridership per bus route at given stops.
-    - This would be done on years 2017-2018 and 2022-2023 to see pre and post pandemic effects
-  - Create a heatmap to illustrate which routes were being used more prior and post pandemic
-    - We can compare map of prior and post to see how much ridership has decreased
-- What are the end-to-end travel times for each bus route in the city?
-  - Heatmaps to demonstrate travel time variations by route, time of day, and season
-  - Time-series Plot for average travel times for bus routes to see anomalies
-  - Bar-chart for route travel time comparisons
-- Are there disparities in the service levels of different routes (which lines are late more often than others)?
-  - Bar chart comparing the averages of the lateness values per route over multiple years
-- Can we chart changes over TIME?
-  - Clean up MBTA Bus arrival departure times to have the correct dates, create a mapping from stop ID to location for visualization on a map.
-  - Visualize range of points to look for extreme outliers (perhaps a car crash occurred) and remove those data points as you want a good range for the heatmap.
-  - Each row will represent a 10 minute/1 hour/1 day (whichever is realistic) time frame. We can then put the averages (or median) of the lateness values for each location. We can then use tools like ArcGIS to create a heatmap of which area is most severely effected. We can then create screenshots to create a gif of how the city’s bus lateness changes over time.
-  - We can compare survey data by going through each category and comparing (i.e. race, income, language preference), and see how the percentages have changed compared to each other. The 2 survey data are formatted differently (2015-2017 is row based) and (2024 survey is column based) so we should go through and create one to one mappings into one file.
-  - We can run this tool on the 2015-2017 data and compare how the visualizations are different.
+![K-Means No Normalization](kmeans_no_normalization.png)
 
-## What is your test plan?
+We then try adding normalization to ensure that location is being factored and we can see that the clusters begin to actually factor in distance. We also add the elbow method by looking at different cost functions after applying different number of clusters. We then decided that 7 clusters was the best choice. The 2 graphs below demonstrate this.
 
-- What is the ridership per bus route? How has this changed from pre-pandemic to post-pandemic time?
-  - Determine what contributes to making a popular bus route
-    - Comparing relative population to number of riders
-  - Test found attributes to see if certain bus routes are more likely to be popular
-- What are the end-to-end travel times for each bus route in the city?
-  - Determine if travel time data is normally distributed via the Shapiro-Wilk Test
-  - Compare pre-pandemic and post-pandemic travel times
-  - Compare travel times across routes
-  - Test if factors like time of day, weather, and route length affect travel time or lateness
-  - Group routes based on travel time patterns for K-Means clustering
-- Are there disparities in the service levels of different routes (which lines are late more often than others)?
-  - Test the lateness times for various factors affecting the predicted vs actual route times and determine which factors have the most impact on lateness from the data of each bus stop (race, income, foot traffic)
-- Can we chart changes over TIME?
-  - Again, a test plan is not necessary as we are not creating predictions for this question, but we can attempt different time frames for each data point to see which visualizations give us the most meaningful insight. We can try including/excluding outliers, and we can try using means/medians for each data point.
+![Elbow Method for Optimal K](elbow_method.png)
+
+![K-Means Normalization](kmeans_normalization.png)
+
+We then did the same with DBScan. The parameters were picked by looking for clusters that would have high average_lateness and non-trivial amount of stops. By manually messing around with the epsilon and min_samples parameter, we landed on 0.2 and 7 respectively.
+
+![DBScan Clustering](dbscan_clustering.png)
+
+### Preliminary results. (e.g. we fit a linear model to the data and we achieve promising results, or we did some clustering and we notice a clear pattern in the data)
+
+After obtaining both DBScan & KMeans, we noticed that the cluster with the most amount of lateness resided in similar spots and used ArcGIS to determine where this actually was on the map.
+
+Below are the KMeans and DBScan results. We see that areas that have high levels of lateness identified by both DBScan and KMeans
+
+![KMeans](KMeans.png)
+
+![DBScan](DBScan.png)
+
+From immediate observations, we notice from our results that the southern area of Boston has the most delays in bus stops. Any outlier from DBScan is also included within KMeans. There could be multiple factors that contribute to this. More people could have cars in this side of Boston that cause traffic jams, people from Southern Boston commute to central Boston more than the North. It s hard to tell from the data here alone, and we'll need to combine with our census data to get a better understanding of what the data here could mean.
