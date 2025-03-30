@@ -75,3 +75,25 @@ Below are the KMeans and DBScan results. We see that areas that have high levels
 ![DBScan](DBScan.png)
 
 From immediate observations, we notice from our results that the southern area of Boston has the most delays in bus stops. Any outlier from DBScan is also included within KMeans. There could be multiple factors that contribute to this. More people could have cars in this side of Boston that cause traffic jams, people from Southern Boston commute to central Boston more than the North. It s hard to tell from the data here alone, and we'll need to combine with our census data to get a better understanding of what the data here could mean.
+
+## MBTA Ridership dataset
+
+### Basic Introduction of Data 
+For the ridership data, we have accumulated data from 2016 - 2024 regarding the number of people who have boarded and exited at a given stop. There are two separate notebooks that were used to show this. One was the ridership which finds the objective value change before and after COVID that uses boardings.
+
+### Data Processing 
+
+Notebook 1: 
+This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called ‘absolute_change’ that was made for each existing route_id. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later. 
+
+NoteBook 2: 
+This process took a little longer as it requires us to cross reference another csv file called stops. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called ‘traffic’ for the second notebook. This one is more specific to say that a given stop has some amount of traffic. 
+
+### Detailed Description of the data modeling methods used 
+For modeling, we used KMeans initially without doing any normalization. In the first KMeans, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic. 
+![alt text](ridership_kmeans_1.png)
+We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.
+![alt text](elbow_ridership.png)
+![alt text](normalized_kmean.png)
+
+![alt text](DBScan_ridership.png)
