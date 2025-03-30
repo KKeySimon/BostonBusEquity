@@ -113,7 +113,7 @@ These highlight populations that may be most transit-dependent or face language 
 
 We performed **KMeans clustering** on route-level demographic features and found three clusters with clearly different lateness profiles. A **PCA projection** confirmed separability between clusters — with Cluster 2 having the highest average lateness and the most marginalized rider profiles.
 
-![[Post-Covid Lateness Weighted Categories](postCovid-rider-survey-table.png)
+![Post-Covid Lateness Weighted Categories](postCovid-rider-survey-table.png)
 
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
