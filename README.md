@@ -113,6 +113,8 @@ These highlight populations that may be most transit-dependent or face language 
 
 We performed **KMeans clustering** on route-level demographic features and found three clusters with clearly different lateness profiles. A **PCA projection** confirmed separability between clusters — with Cluster 2 having the highest average lateness and the most marginalized rider profiles.
 
+![Lateness-Weighted Post-Covid Table](postCovid-rider-survey-data.png)
+
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
 Since arrival/departure data was not available for 2015–2017, we used **2018 MBTA arrival/departure records** to estimate pre-COVID lateness.
@@ -125,6 +127,8 @@ Examples of top pre-COVID categories:
 - **Low-income:** No
 - **Access:** Walked or Bicycled
 - **License:** Yes
+
+![Lateness-Weighted Pre-Covid Table](preCovid-rider-survey-data.png)
 
 ## Pre vs. Post-COVID Change in Top Categories
 
