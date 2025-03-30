@@ -94,6 +94,19 @@ For modeling, we used KMeans initially without doing any normalization. In the f
 ![alt text](ridership_kmeans_1.png)
 We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.
 ![alt text](elbow_ridership.png)
+With seven groups, we have it ouput the image below. The groups becomes more clear, and the general locations seem to be more important when considering how the points were clustered. 
+| Cluster | Traffic      |
+|---------|-------------|
+| 0       | 748.375705  |
+| 1       | 67.359137   |
+| 2       | 34.573867   |
+| 3       | 2569.139219 |
+| 4       | 51.438401   |
+| 5       | 7772.638095 |
+| 6       | 28.334925   |
 ![alt text](normalized_kmean.png)
-
+After seeing those results, we then tried using a DBScan, but this process still needs to be explore further since the current output does not help us deduce more about the data we are working with. 
 ![alt text](DBScan_ridership.png)
+### Preliminary Results 
+
+In terms of ridership, we found that in terms of absolute ridership, the amount of people riding the bus has decreased after COVID. This is clear when we look at the ridership notebook. The traffic for stops seems to be greatly divided where there are some groups seeing thousands of riders in a season and others seeing fifty. Cluster 5 in particular seems to have the most riders. This cluster is located in the Back Bay area up into the Bay Village area. To have a comprehensive understanding of the problem, we will be combining this data with the other sets of data to draw better conclusions for our final report.  
