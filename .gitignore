@@ -1,1 +1,4 @@
 *.csv
+!results/*.csv
+!stops.csv
+scraped_survey_data/

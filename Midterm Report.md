@@ -12,17 +12,17 @@ We have access to the expected and actual arrival data everyday from the year 20
 
 A lot of the data processing was a direct consequence by looking at visualizations of data. For example, we later mention how date and time is formatted in the dataset. The format of the data was in DATE (i.e. 2024-01-07) with an included scheduled and actual stop TIME (formatted in 1900-01-01T00:00:04:00Z). The initial dataset was merged to slice off the 1900-01-01 and append the date to the time. But this proved to be inaccurate and was found thanks to visualizations when we visualized lateness over time.
 
-![Lateness Over Time V1](lateness_over_time_v1.png)
+![Lateness Over Time V1](images/lateness_over_time_v1.png)
 
 The graph above showed very weird consistent pattern of outliers. After writing down these outliers in a csv, we see that the outlier values were around 86400, which is equivalent to being one day late. By visualizing our data, we were easily able to find taht sometimes, if the expected and actual dates are different, the data is formatted so that the day that comes after is formatted as (1900-01-02T00:00:00z).
 
 We then decided to graph the new formatted data that was now fixed. We still see there are outliers and that there are mutliple outliers back to back as shown in the graph below.
 
-![Lateness Over Time Graph](lateness_over_time_v2.png)
+![Lateness Over Time Graph](images/lateness_over_time_v2.png)
 
 We then created a new csv looking for the outlier rows which showed that these outliers and we see they are from the same station back to back. But the intervals between the actual bus time arrivals are the same as the intervals between expected bus time arrivals. We believe that this is most likely some announced shift in the schedule that was not reflected in the spreadsheet. We decided to put an arbitrary threshold of 3600 seconds (1 hour) of lateness or earliness. After we had removed obvious outliers from our dataset, we ended up with the a visualization of the data that looked like the graph below.
 
-![Lateness Over Time](lateness_over_time_v3.png)
+![Lateness Over Time](images/lateness_over_time_v3.png)
 
 We felt the the data looked good enough that we were able to display it onto [ARCGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=9f60b58427e94c3991bba8cbce9f61ff). The map has a time series player as well and although we've only added 2024 data, the process can be extended to any other year.
 
@@ -54,17 +54,17 @@ Since we weren't given a explicit means to model our data, we'll be taking creat
 
 We approached this by first using KMeans without any form of normalization. The features included the average lateness, longitude, and latitude. Since the data isn't normalized, the lateness is the only thing that becomes the focus as lateness ranges from -300 to 300 while latitude and longitutde stayed within 41 to 42 and -71 to -72. This can be shown below.
 
-![K-Means No Normalization](kmeans_no_normalization.png)
+![K-Means No Normalization](images/kmeans_no_normalization.png)
 
 We then try adding normalization to ensure that location is being factored and we can see that the clusters begin to actually factor in distance. We also add the elbow method by looking at different cost functions after applying different number of clusters. We then decided that 7 clusters was the best choice. The 2 graphs below demonstrate this.
 
-![Elbow Method for Optimal K](elbow_method.png)
+![Elbow Method for Optimal K](images/elbow_method.png)
 
-![K-Means Normalization](kmeans_normalization.png)
+![K-Means Normalization](images/kmeans_normalization.png)
 
 We then did the same with DBScan. The parameters were picked by looking for clusters that would have high average_lateness and non-trivial amount of stops. By manually messing around with the epsilon and min_samples parameter, we landed on 0.2 and 7 respectively.
 
-![DBScan Clustering](dbscan_clustering.png)
+![DBScan Clustering](images/dbscan_clustering.png)
 
 ### Preliminary results. (e.g. we fit a linear model to the data and we achieve promising results, or we did some clustering and we notice a clear pattern in the data)
 
@@ -72,9 +72,9 @@ After obtaining both DBScan & KMeans, we noticed that the cluster with the most 
 
 Below are the KMeans and DBScan results. We see that areas that have high levels of lateness identified by both DBScan and KMeans
 
-![KMeans](KMeans.png)
+![KMeans](images/KMeans.png)
 
-![DBScan](DBScan.png)
+![DBScan](images/DBScan.png)
 
 From immediate observations, we notice from our results that the southern area of Boston has the most delays in bus stops. Any outlier from DBScan is also included within KMeans. There could be multiple factors that contribute to this. More people could have cars in this side of Boston that cause traffic jams, people from Southern Boston commute to central Boston more than the North. It s hard to tell from the data here alone, and we'll need to combine with our census data to get a better understanding of what the data here could mean.
 
@@ -115,7 +115,7 @@ These highlight populations that may be most transit-dependent or face language 
 
 We performed **KMeans clustering** on route-level demographic features and found three clusters with clearly different lateness profiles. A **PCA projection** confirmed separability between clusters — with Cluster 2 having the highest average lateness and the most marginalized rider profiles.
 
-![Post-Covid Lateness Weighted Categories](postCovid-rider-survey-table.png)
+![Post-Covid Lateness Weighted Categories](images/postCovid-rider-survey-table.png)
 
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
@@ -130,7 +130,7 @@ Examples of top pre-COVID categories:
 - **Access:** Walked or Bicycled
 - **License:** Yes
 
-![Pre-Covid Lateness Weighted Categories](preCovid-rider-survey-table.png)
+![Pre-Covid Lateness Weighted Categories](images/preCovid-rider-survey-table.png)
 
 ## Pre vs. Post-COVID Change in Top Categories
 
@@ -149,30 +149,34 @@ This comparison suggests how COVID-19 may have intensified the inequities alread
 
 # MBTA Ridership Dataset
 
-## Basic Introduction of Data 
+## Basic Introduction of Data
+
 For the ridership data, we have accumulated data from 2016 - 2024 regarding the number of people who have boarded and exited at a given stop. There are two separate notebooks that were used to show this. One was the ridership which finds the objective value change before and after COVID that uses boardings.
 
-## Data Processing 
+## Data Processing
 
-### Notebook 1:  
-This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called `absolute_change` that was made for each existing `route_id`. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later. 
+### Notebook 1:
 
-### Notebook 2:  
-This process took a little longer as it requires us to cross reference another csv file called `stops`. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called `traffic` for the second notebook. This one is more specific to say that a given stop has some amount of traffic. 
+This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called `absolute_change` that was made for each existing `route_id`. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later.
 
-## Detailed Description of the Data Modeling Methods Used  
-For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.  
+### Notebook 2:
 
-![K-Means Clustering Without Normalization](ridership_kmeans_1.png)  
+This process took a little longer as it requires us to cross reference another csv file called `stops`. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called `traffic` for the second notebook. This one is more specific to say that a given stop has some amount of traffic.
 
-We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.  
+## Detailed Description of the Data Modeling Methods Used
 
-![Elbow Method](elbow_ridership.png)  
+For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.
 
-With seven groups, we have it output the image below. The groups become more clear, and the general locations seem to be more important when considering how the points were clustered.  
+![K-Means Clustering Without Normalization](images/ridership_kmeans_1.png)
 
-| Cluster | Traffic      |
-|---------|-------------|
+We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.
+
+![Elbow Method](images/elbow_ridership.png)
+
+With seven groups, we have it output the image below. The groups become more clear, and the general locations seem to be more important when considering how the points were clustered.
+
+| Cluster | Traffic     |
+| ------- | ----------- |
 | 0       | 748.375705  |
 | 1       | 67.359137   |
 | 2       | 34.573867   |
@@ -181,12 +185,12 @@ With seven groups, we have it output the image below. The groups become more cle
 | 5       | 7772.638095 |
 | 6       | 28.334925   |
 
-![K-Means Clustering With Normalization](normalized_kmean.png)  
+![K-Means Clustering With Normalization](images/normalized_kmean.png)
 
-After seeing those results, we then tried using a **DBScan**, but this process still needs to be explored further since the current output does not help us deduce more about the data we are working with.  
+After seeing those results, we then tried using a **DBScan**, but this process still needs to be explored further since the current output does not help us deduce more about the data we are working with.
 
-![DBScan Results](DBScan_ridership.png)  
+![DBScan Results](images/DBScan_ridership.png)
 
-## Preliminary Results  
+## Preliminary Results
 
 In terms of ridership, we found that in terms of absolute ridership, the amount of people riding the bus has decreased after COVID. This is clear when we look at the ridership notebook. The traffic for stops seems to be greatly divided where there are some groups seeing thousands of riders in a season and others seeing fifty. **Cluster 5** in particular seems to have the most riders. This cluster is located in the **Back Bay area up into the Bay Village area**. To have a comprehensive understanding of the problem, we will be combining this data with the other sets of data to draw better conclusions for our final report.
