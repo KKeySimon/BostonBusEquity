@@ -149,34 +149,30 @@ This comparison suggests how COVID-19 may have intensified the inequities alread
 
 # MBTA Ridership Dataset
 
-## Basic Introduction of Data
-
+## Basic Introduction of Data 
 For the ridership data, we have accumulated data from 2016 - 2024 regarding the number of people who have boarded and exited at a given stop. There are two separate notebooks that were used to show this. One was the ridership which finds the objective value change before and after COVID that uses boardings.
 
-## Data Processing
+## Data Processing 
 
-### Notebook 1:
+### Notebook 1:  
+This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called `absolute_change` that was made for each existing `route_id`. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later. 
 
-This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called `absolute_change` that was made for each existing `route_id`. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later.
+### Notebook 2:  
+This process took a little longer as it requires us to cross reference another csv file called `stops`. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called `traffic` for the second notebook. This one is more specific to say that a given stop has some amount of traffic. 
 
-### Notebook 2:
+## Detailed Description of the Data Modeling Methods Used  
+For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.  
 
-This process took a little longer as it requires us to cross reference another csv file called `stops`. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called `traffic` for the second notebook. This one is more specific to say that a given stop has some amount of traffic.
+![K-Means Clustering Without Normalization](ridership_kmeans_1.png)  
 
-## Detailed Description of the Data Modeling Methods Used
+We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.  
 
-For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.
+![Elbow Method](elbow_ridership.png)  
 
-![K-Means Clustering Without Normalization](ridership_kmeans_1.png)
+With seven groups, we have it output the image below. The groups become more clear, and the general locations seem to be more important when considering how the points were clustered.  
 
-We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.
-
-![Elbow Method](elbow_ridership.png)
-
-With seven groups, we have it output the image below. The groups become more clear, and the general locations seem to be more important when considering how the points were clustered.
-
-| Cluster | Traffic     |
-| ------- | ----------- |
+| Cluster | Traffic      |
+|---------|-------------|
 | 0       | 748.375705  |
 | 1       | 67.359137   |
 | 2       | 34.573867   |
@@ -185,12 +181,12 @@ With seven groups, we have it output the image below. The groups become more cle
 | 5       | 7772.638095 |
 | 6       | 28.334925   |
 
-![K-Means Clustering With Normalization](normalized_kmean.png)
+![K-Means Clustering With Normalization](normalized_kmean.png)  
 
-After seeing those results, we then tried using a **DBScan**, but this process still needs to be explored further since the current output does not help us deduce more about the data we are working with.
+After seeing those results, we then tried using a **DBScan**, but this process still needs to be explored further since the current output does not help us deduce more about the data we are working with.  
 
-![DBScan Results](DBScan_ridership.png)
+![DBScan Results](DBScan_ridership.png)  
 
-## Preliminary Results
+## Preliminary Results  
 
 In terms of ridership, we found that in terms of absolute ridership, the amount of people riding the bus has decreased after COVID. This is clear when we look at the ridership notebook. The traffic for stops seems to be greatly divided where there are some groups seeing thousands of riders in a season and others seeing fifty. **Cluster 5** in particular seems to have the most riders. This cluster is located in the **Back Bay area up into the Bay Village area**. To have a comprehensive understanding of the problem, we will be combining this data with the other sets of data to draw better conclusions for our final report.
