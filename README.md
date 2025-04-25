@@ -96,9 +96,9 @@ We then did the same with DBScan. The parameters were picked by looking for clus
 
 We then perform this method on each year to get K-Means and DBScan data. We then highlight the clusters that have the highest amount of lateness to determine which areas may be problematic. After creating a GIF of each year, we get varying results.
 
-![KMeans Yearly](kmeans_max_lateness_clusters.gif)
+![KMeans Yearly](images/kmeans_max_lateness_clusters.gif)
 
-![DBScan Yearly](dbscan_max_lateness_clusters.gif)
+![DBScan Yearly](images/dbscan_max_lateness_clusters.gif)
 
 ### Results
 
