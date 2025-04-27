@@ -2,4 +2,5 @@
 !results/*.csv
 !stops.csv
 scraped_survey_data/
+*ridership_data/2015-2017-tables/
 !ridership_data/scraped_survey_data/
