@@ -2,3 +2,4 @@
 !results/*.csv
 !stops.csv
 scraped_survey_data/
+!ridership_data/scraped_survey_data/
