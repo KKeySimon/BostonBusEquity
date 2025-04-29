@@ -151,8 +151,6 @@ Top changes overall included:
 
 These shifts likely reflect remote-work adoption and economic changes after Covid.
 
----
-
 ## Lateness-Weighted Category Analysis (Post-COVID)
 
 1. Compute average lateness per route in 2023 (capping outliers at ±1 hour).  
@@ -174,8 +172,6 @@ We then ran K-means clustering on the full demographic profile of each late rout
 
 ![Post-COVID Lateness Weighted Categories](images/postCovid-rider-survey-table.png)
 
----
-
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
 Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure CSVs** to replicate the same lateness steps:
@@ -193,8 +189,6 @@ Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure
 - **License:** Yes  
 
 ![Pre-COVID Lateness Weighted Categories](images/preCovid-rider-survey-table.png)
-
----
 
 ## Pre vs. Post-COVID Change in Top Categories
 
@@ -214,13 +208,13 @@ We plotted these changes by survey measure:
 
 Because we compared only the top few categories—often one “yes” vs. its complementary “no”—our percent-point changes can appear exaggerated. In reality, a large swing in a binary pair (e.g. “Low-income: Yes” vs. “Low-income: No”) will force the complementary category to move equally in the opposite direction. Readers should bear this in mind when interpreting large changes in these category measures.
 
----
-
 ### Summary of Findings
 
 - **Remote-work trends:** Home-based work dropped sharply; 5-day riders declined.  
 - **Fare shifts:** Monthly passes rose as pay-per-ride fell.  
 - **Equity impacts:** Late-route riders are increasingly low-income and non-English speakers, suggesting COVID-era service gaps hit the most vulnerable hardest.
+
+---
 
 # MBTA Ridership Dataset
 
