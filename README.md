@@ -122,79 +122,105 @@ In regards to KMeans, we got much more promising results. The clustering shows a
 
 But we see that average lateness in the South is higher during 2024 and 2023 compared to 2018 and 2019. It's hard to tell what caused this shift here as well, and we're not confident as to what could've caused geographic shift compared to our theories on overall raised lateness that it would be pure speculation. Hopefully we can make better sense of this data after combining all our findings.
 
+
+
 # Rider Survey Data Integration and Analysis
 
 To explore which rider characteristics are most correlated with bus lateness, we utilized both pre-COVID (2015–2017 survey + 2018 arrival/departure data) and post-COVID (2023) MBTA datasets.
 
 ## Data Collection & Processing
 
-**Post-COVID (2023):** The rider demographic data was available in CSV format. We filtered for `service_mode = Bus`, dropped nulls, standardized category names, and computed the percentage of riders per demographic category.
+**Post-COVID (2023):**  
+We loaded the 2023 rider survey CSV, filtered for `service_mode == Bus`, dropped nulls, standardized category names, and scaled the survey’s “weighted_percent” from 0–1 to 0–100. We then built a `full_category` label (`measure: category`) for easy comparison.
 
-**Pre-COVID (2015–2017):** These were extracted from multiple Excel exports, which weren’t available in a file format, from CTPS's MBTA Survey Dashboard, accessed using a `requests-html + pyppeteer` scraper (`rider_survey_scraper.py`). Because the data was in raw counts, we normalized values by row to compute category-level percentages per route.
+**Pre-COVID (2015–2017):**  
+Because the CTPS dashboard only exposed eight demographic tables as dynamically-loaded tabs, we ran `rider_survey_scraper.py` (requests-html + pyppeteer) to dump each tab into a `.txt` file. We then parsed those into eight `.xlsx` tables (one per demographic), loaded them all, normalized each route’s counts into percentages, and pivoted into a long format with columns `(Route, full_category, pre_covid_percent)`.
 
-To match pre- and post-COVID datasets, we aligned category naming conventions using a full-category mapping, looking at the measure group (i.e. `access_mode`) and measure (subcategory), allowing for comparison across surveys.
+We aligned naming conventions across the two eras by mapping each pre-COVID “measure: subcategory” to our post-COVID `full_category`.
+
+---
 
 ## Pre- vs. Post-COVID Category Comparison
 
-We generated comparison tables for the different category distributions before and after COVID. Some of the most significantly changed categories include:
+We merged the two long-form tables on `full_category`, grouped by survey measure (Income, Race, Access Mode, etc.), and displayed side-by-side comparison tables.  
+Top changes overall included:
 
-- **Trip Purpose:** Home-based Work
-- **Trip Frequency:** 5 days a week
-- **Fare Type:** Monthly Pass
+- Trip Purpose: Home-based Work  
+- Trip Frequency: 5 days a week  
+- Fare Type:*Monthly Pass  
 
-These shifts suggest meaningful changes in travel habits and fare usage, likely related to remote work adoption and economic impacts post-COVID.
+These shifts likely reflect remote-work adoption and economic changes after Covid.
+
+---
 
 ## Lateness-Weighted Category Analysis (Post-COVID)
 
-Using 2023 arrival/departure records, we calculated average lateness per route (after removing outliers beyond an hour). Routes with above-average lateness were selected and cross-referenced with demographic data to identify groups most affected by unreliable service.
+1. Compute average lateness per route in 2023 (capping outliers at ±1 hour).  
+2. Select “late” routes whose mean lateness exceeds the citywide average.  
+3. Filter the 2023 rider survey to only those late routes.  
+4. Compute, for each survey measure, the top 3 rider categories by average percent.  
+5. Visualize with grouped bar charts.
 
-We visualized the top 3 categories in each demographic measure group on high-lateness routes. Among the highest were:
+Among the highest on late routes:
 
-- **Access:** Walked or Bicycled
-- **Alternative Mode:** No
-- **Income:** Yes (low-income)
-- **English Ability:** Never
+- **Access:** Walked or Bicycled  
+- **Alternative Mode:** No  
+- **Income:** Low-income (Yes)  
+- **English Ability:** Never  
 
-These highlight populations that may be most transit-dependent or face language barriers.
+These results highlight riders who may be most transit-dependent or face language barriers.
 
-We performed **KMeans clustering** on route-level demographic features and found three clusters with clearly different lateness profiles. A **PCA projection** confirmed separability between clusters — with Cluster 2 having the highest average lateness and the most marginalized rider profiles.
+We then ran K-means clustering on the full demographic profile of each late route, and a PCA projection confirmed three distinct clusters—Cluster 2 had the worst lateness and the most marginalized profiles.
 
-![Post-Covid Lateness Weighted Categories](images/postCovid-rider-survey-table.png)
+![Post-COVID Lateness Weighted Categories](images/postCovid-rider-survey-table.png)
+
+---
 
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
-Since arrival/departure data was not available for 2015–2017, we used **2018 MBTA arrival/departure records** to estimate pre-COVID lateness.
+Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure CSVs** to replicate the same lateness steps:
 
-After computing average lateness per route, we identified routes with above-average delays and isolated their rider survey responses (from the 2015–2017 survey). We then used aggregation and ranked the top demographic categories with these high-lateness routes.
+1. Compute average lateness per route (±1 hr cap).  
+2. Identify late routes (above citywide mean).  
+3. Filter 2015–2017 survey to those routes.  
+4. Rank the top demographic categories.
 
-Examples of top pre-COVID categories:
+**Example top categories in 2018 late routes:**
 
-- **Trip Purpose:** Home-based Work
-- **Low-income:** No
-- **Access:** Walked or Bicycled
-- **License:** Yes
+- **Trip Purpose:** Home-based Work  
+- **Low-income:** No  
+- **Access:** Walked or Bicycled  
+- **License:** Yes  
 
-![Pre-Covid Lateness Weighted Categories](images/preCovid-rider-survey-table.png)
+![Pre-COVID Lateness Weighted Categories](images/preCovid-rider-survey-table.png)
+
+---
 
 ## Pre vs. Post-COVID Change in Top Categories
 
-To assess how key demographics on high-lateness routes shifted over time, we:
+To see how these high-lateness profiles shifted:
 
-1. Matched top categories (by average percentage) from the pre-COVID high-lateness routes.
-2. Looked up the same categories on post-COVID high-lateness routes.
-3. Calculated the percentage point change from pre- to post-COVID.
+1. Took the top 2–3 categories per measure from the **2018 late-route survey**.  
+2. Looked up those same `full_category` labels in the **2023 late-route survey**.  
+3. Computed **percent-point change** (Post – Pre).
 
-This change was visualized in a bar graph grouped by survey measure (e.g., "fares", "access_mode", "race_and_ethnicity")/
+We plotted these changes by survey measure:
 
-![Pre and Post-Covid Category Comparison](images/demographic-category-comparison.png)
+![Pre and Post-COVID Category Comparison](images/demographic-category-comparison.png)
 
-This comparison suggests how COVID-19 may have intensified the inequities already faced by riders on underperforming routes.
+---
 
+## Note/Caveat: Binary-Pair Skew
 
+Because we compared only the top few categories—often one “yes” vs. its complementary “no”—our percent-point changes can appear exaggerated. In reality, a large swing in a binary pair (e.g. “Low-income: Yes” vs. “Low-income: No”) will force the complementary category to move equally in the opposite direction. Readers should bear this in mind when interpreting large changes in these category measures.
 
+---
 
+### Summary of Findings
 
-
+- **Remote-work trends:** Home-based work dropped sharply; 5-day riders declined.  
+- **Fare shifts:** Monthly passes rose as pay-per-ride fell.  
+- **Equity impacts:** Late-route riders are increasingly low-income and non-English speakers, suggesting COVID-era service gaps hit the most vulnerable hardest.
 
 # MBTA Ridership Dataset
 
