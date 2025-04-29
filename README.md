@@ -184,12 +184,17 @@ To assess how key demographics on high-lateness routes shifted over time, we:
 2. Looked up the same categories on post-COVID high-lateness routes.
 3. Calculated the percentage point change from pre- to post-COVID.
 
-This change was visualized in a bar graph grouped by survey measure (e.g., "fares", "access_mode", "race_and_ethnicity"). Notable trends included:
+This change was visualized in a bar graph grouped by survey measure (e.g., "fares", "access_mode", "race_and_ethnicity")/
 
-- **Increases** in non-English speakers and riders without alternative modes.
-- **Declines** in licensed drivers and higher-income riders on late routes.
+![Pre and Post-Covid Category Comparison](images/demographic-category-comparison.png)
 
 This comparison suggests how COVID-19 may have intensified the inequities already faced by riders on underperforming routes.
+
+
+
+
+
+
 
 # MBTA Ridership Dataset
 
