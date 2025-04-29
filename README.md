@@ -202,17 +202,36 @@ We plotted these changes by survey measure:
 
 ![Pre and Post-COVID Category Comparison](images/demographic-category-comparison.png)
 
----
+## Results and Summary
 
-## Note/Caveat: Binary-Pair Skew
+### Note/Caveat: Binary-Pair Skew
 
 Because we compared only the top few categories—often one “yes” vs. its complementary “no”—our percent-point changes can appear exaggerated. In reality, a large swing in a binary pair (e.g. “Low-income: Yes” vs. “Low-income: No”) will force the complementary category to move equally in the opposite direction. Readers should bear this in mind when interpreting large changes in these category measures.
 
 ### Summary of Findings
 
-- **Remote-work trends:** Home-based work dropped sharply; 5-day riders declined.  
-- **Fare shifts:** Monthly passes rose as pay-per-ride fell.  
-- **Equity impacts:** Late-route riders are increasingly low-income and non-English speakers, suggesting COVID-era service gaps hit the most vulnerable hardest.
+- **Remote-work trends:**  
+  - *Trip Purpose:* “Home-based work” share fell from ~37 % in 2018 to ~56 % in 2023 on late routes—reflecting more non-work trips (e.g. errands, medical).  
+  - *Trip Frequency:* 5-day-a-week riders dropped from ~29 % to ~44 % after COVID, confirming fewer daily commuters.
+
+- **Fare shifts:**  
+  - **Monthly passes** climbed as the dominant fare product, while pay-per-ride and shorter passes declined—consistent with riders preferring prepaid plans in a more uncertain travel environment.
+
+- **Equity impacts on late routes:**  
+  - **Low-income “Yes”** rose sharply on routes with above-average lateness (from ~17 % to ~82 %), while **Low-income “No”** fell, suggesting the financial vulnerability of riders on unreliable lines.  
+  - **Non-English speakers** (“English Ability: Never”) and those **without alternative modes** (“Used Alternative Mode: No”) also increased, highlighting language and mobility barriers.
+
+### Answering the Spark! Questions
+
+1. **Can we chart changes over TIME?**  
+   - We built **Pre- vs. Post-COVID bar charts** for each demographic category, directly comparing 2018 vs. 2023 percentages.  
+   - Although our data has only two “snapshots,” the same pipeline can ingest additional year-specific survey files to produce a true time-series.
+
+2. **Are there disparities in the service levels of different routes?**  
+   - We computed **average lateness per route** (capping outliers ±1 hr) across all trips in 2018 and 2023.  
+   - By flagging routes whose average lateness exceeded the citywide mean, we isolated the “slowest” lines and examined their rider profiles.  
+   - This approach reveals which routes consistently underperform and which rider groups (low-income, limited-English, etc.) bear the brunt of those delays.  
+
 
 ---
 
