@@ -126,17 +126,17 @@ But we see that average lateness in the South is higher during 2024 and 2023 com
 
 # Rider Survey Data Integration and Analysis
 
-To explore which rider characteristics are most correlated with bus lateness, we utilized both pre-COVID (2015–2017 survey + 2018 arrival/departure data) and post-COVID (2023) MBTA datasets.
+To explore the ridership survery data and determine which rider characteristics are most correlated with bus lateness, we utilized both pre-COVID (2015–2017 survey + 2018 arrival/departure data) and post-COVID (2023) MBTA datasets. This helped us utilize a few of the other sections of this project while determining more rider-specific correlations with late routes to see what groups are the most effected by late buses. 
 
 ## Data Collection & Processing
 
 **Post-COVID (2023):**  
-We loaded the 2023 rider survey CSV, filtered for `service_mode == Bus`, dropped nulls, standardized category names, and scaled the survey’s “weighted_percent” from 0–1 to 0–100. We then built a `full_category` label (`measure: category`) for easy comparison.
+We loaded the 2023 rider survey CSV, filtered for only MBTA buses routes `service_mode == Bus`, dropped nulls, standardized category names, and scaled the survey’s “weighted_percent” from 0–1 to 0–100. We then built a `full_category` label (`measure: category`) for easy comparison among different years.
 
 **Pre-COVID (2015–2017):**  
-Because the CTPS dashboard only exposed eight demographic tables as dynamically-loaded tabs, we ran `rider_survey_scraper.py` (requests-html + pyppeteer) to dump each tab into a `.txt` file. We then parsed those into eight `.xlsx` tables (one per demographic), loaded them all, normalized each route’s counts into percentages, and pivoted into a long format with columns `(Route, full_category, pre_covid_percent)`.
+Because the CTPS dashboard only exposed eight demographic tables as dynamically-loaded tabs / excel exports, we created and ran `rider_survey_scraper.py` (requests-html + pyppeteer) to dump each tab into a `.txt` file. We then parsed those into eight `.xlsx` tables (one per demographic), loaded them all, normalized each route’s counts into percentages, and changed them into a long format with columns `(Route, full_category, pre_covid_percent)`.
 
-We aligned naming conventions across the two eras by mapping each pre-COVID “measure: subcategory” to our post-COVID `full_category`.
+We aligned naming conventions across the two eras by mapping each pre-COVID “measure: subcategory” to our post-COVID `full_category` for later analysis.
 
 
 ## Pre- vs. Post-COVID Category Comparison
@@ -146,7 +146,7 @@ Top changes overall included:
 
 - Trip Purpose: Home-based Work  
 - Trip Frequency: 5 days a week  
-- Fare Type:*Monthly Pass  
+- Fare Type: Monthly Pass  
 
 These shifts likely reflect remote-work adoption and economic changes after Covid.
 
@@ -173,7 +173,7 @@ We then ran K-means clustering on the full demographic profile of each late rout
 
 ## Lateness-Weighted Category Analysis (Pre-COVID)
 
-Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure CSVs** to replicate the same lateness steps:
+Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure CSVs** to generalize and replicate the same lateness steps:
 
 1. Compute average lateness per route (±1 hr cap).  
 2. Identify late routes (above citywide mean).  
@@ -197,7 +197,7 @@ To see how these high-lateness profiles shifted:
 2. Looked up those same `full_category` labels in the **2023 late-route survey**.  
 3. Computed **percent-point change** (Post – Pre).
 
-We plotted these changes by survey measure:
+We plotted these changes by survey measure/category:
 
 ![Pre and Post-COVID Category Comparison](images/demographic-category-comparison.png)
 
@@ -205,7 +205,7 @@ We plotted these changes by survey measure:
 
 ### Note/Caveat: Binary-Pair Skew
 
-Because we compared only the top few categories—often one “yes” vs. its complementary “no”—our percent-point changes can appear exaggerated. In reality, a large swing in a binary pair (e.g. “Low-income: Yes” vs. “Low-income: No”) will force the complementary category to move equally in the opposite direction. Readers should bear this in mind when interpreting large changes in these category measures.
+Because we compared only the top few categories—often one “yes” vs. its complementary “no”—our percent-point changes can appear slightly exaggerated in the above graphs. In reality, a large change in a binary pair like this (e.g. “Low-income: Yes” vs. “Low-income: No”) will force the complementary category to move equally in the opposite direction.
 
 ### Summary of Findings
 
