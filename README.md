@@ -236,49 +236,111 @@ Because we compared only the top few categories—often one “yes” vs. its co
 ---
 
 # MBTA Ridership Dataset
+## Overview of the Data
 
-## Basic Introduction of Data
+The ridership dataset spans from 2016 to 2024 and includes information on the number of passengers boarding and exiting at each stop. This data allows us to analyze trends in ridership before and after COVID-19. Two separate notebooks were used to process and analyze this data:
 
-For the ridership data, we have accumulated data from 2016 - 2024 regarding the number of people who have boarded and exited at a given stop. There are two separate notebooks that were used to show this. One was the ridership which finds the objective value change before and after COVID that uses boardings.
+1. **Notebook 1:** Focuses on calculating the change in ridership before and after COVID-19 by analyzing boardings.
+2. **Notebook 2:** Focuses on stop-level traffic by combining boarding and exiting data and mapping it to geographic coordinates.
 
+However, in the final report with all notebooks merged, it has been separated into three parts: 
+
+1. **Pre-Covid** ridership at each given stop 
+2. **Post-Covid** ridership at each given stop 
+3. **Absolute change** in ridership if we were to consider all the stops 
 ## Data Processing
 
-### Notebook 1:
+The data processing involved cleaning and preparing the datasets for analysis. Key steps included:
 
-This process was generally straightforward with removing NaN values. In order to see the effect of COVID, we processed so that the groups would be averaged from the previous to 2019 and post 2019. As such, the first notebook is simply removing other needless variables and isolating the important variables we wanted to see. In this notebook, we implemented a new variable called `absolute_change` that was made for each existing `route_id`. For broad generalizations, this notebook is almost complete with some minor fixes necessary for submission later.
+1. **Handling Missing Values:**  
+   NaN values were removed from critical columns to ensure data integrity during analysis.
 
-### Notebook 2:
+2. **Merging Tables:**  
+   Relevant tables, such as stop-level data and ridership data, were merged using common keys like `stop_id` to enrich the dataset with additional attributes (e.g., latitude and longitude). This was done only on the pre-covid and post-covid areas since the absolute change was done regardless of location
 
-This process took a little longer as it requires us to cross reference another csv file called `stops`. Similar to lateness, ARCGIS takes in coordinates, so we simply matched the stop id to a specific coordinate. We combined the population who boarded and exited to generate a new term called `traffic` for the second notebook. This one is more specific to say that a given stop has some amount of traffic.
+3. **Column Cleanup:**  
+   Unnecessary columns were dropped to streamline the dataset and focus on the variables required for analysis.
+
+These steps ensured that the data was clean, consistent, and ready for further exploration and modeling.
 
 ## Detailed Description of the Data Modeling Methods Used
 
 For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.
 
 ![K-Means Clustering Without Normalization](images/ridership_kmeans_1.png)
+### Pre-COVID KMeans Clustering Results (With Normalization)
 
-We then added normalization to make sure all factors are being considered. After using the elbow method, we find that the optimal number of clusters is seven as shown below.
+| Cluster | Average Traffic |
+| ------- | --------------- |
+| 0       | 45.56           |
+| 1       | 2526.63         |
+| 2       | 686.19          |
+| 3       | 7772.64         |
 
-![Elbow Method](images/elbow_ridership.png)
+### Post-COVID KMeans Clustering Results (With Normalization)
 
-With seven groups, we have it output the image below. The groups become more clear, and the general locations seem to be more important when considering how the points were clustered.
+| Cluster | Average Traffic |
+| ------- | --------------- |
+| 0       | 33.56           |
+| 1       | 1803.23         |
+| 2       | 515.62          |
+| 3       | 4572.40         |
+### Observations (Without Normalization)
 
-| Cluster | Traffic     |
-| ------- | ----------- |
-| 0       | 748.375705  |
-| 1       | 67.359137   |
-| 2       | 34.573867   |
-| 3       | 2569.139219 |
-| 4       | 51.438401   |
-| 5       | 7772.638095 |
-| 6       | 28.334925   |
+- **Cluster 3** consistently had the highest traffic in both pre- and post-COVID datasets, indicating areas with the most ridership.
+- The clustering was heavily influenced by traffic values, with geographic factors playing a minimal role due to the lack of normalization.
+- Post-COVID, the average traffic in most clusters decreased, reflecting the overall decline in ridership.
+These results highlighted the need for normalization to ensure that all features (traffic, latitude, and longitude) were equally weighted in the clustering process. This step was crucial for uncovering geographic patterns in addition to traffic-based groupings.
+### Pre-Covid Table
 
-![K-Means Clustering With Normalization](images/normalized_kmean.png)
+| Cluster | Average Traffic |
+| ------- | --------------- |
+| 0       | 70.75           |
+| 1       | 20.41           |
+| 2       | 40.08           |
+| 3       | 3584.23         |
+| 4       | 28.78           |
+| 5       | 76.77           |
+| 6       | 949.65          |
 
-After seeing those results, we then tried using a **DBScan**, but this process still needs to be explored further since the current output does not help us deduce more about the data we are working with.
+### Post-Covid Table
 
-![DBScan Results](images/DBScan_ridership.png)
+| Cluster | Average Traffic |
+| ------- | --------------- |
+| 0       | 21.46           |
+| 1       | 53.87           |
+| 2       | 18.59           |
+| 3       | 2653.60         |
+| 4       | 50.59           |
+| 5       | 712.54          |
+| 6       | 26.83           |
+### Pre COVID DBScan
+![K-Means Clustering after Normalization - pre](images/DBScan(pre-COVID).png)
+### Post COVID DBScan
+![K-Means Clustering after normalization -post](images/DBScan(post-COVID).png)
+### Insights from Clustering
 
-## Preliminary Results
+- **High-Traffic Areas:** Cluster 3 consistently exhibited the highest traffic levels in both pre- and post-COVID datasets, primarily concentrated in the **Back Bay and Bay Village areas**.
+- **Geographic Trends:** Normalized KMeans clustering revealed clear geographic distinctions, with some clusters representing densely populated urban centers and others highlighting low-traffic suburban stops.
+- **Impact of COVID-19:** While the overall clustering patterns remained consistent, most clusters experienced a decline in average traffic post-COVID, reflecting the broader reduction in ridership.
 
-In terms of ridership, we found that in terms of absolute ridership, the amount of people riding the bus has decreased after COVID. This is clear when we look at the ridership notebook. The traffic for stops seems to be greatly divided where there are some groups seeing thousands of riders in a season and others seeing fifty. **Cluster 5** in particular seems to have the most riders. This cluster is located in the **Back Bay area up into the Bay Village area**. To have a comprehensive understanding of the problem, we will be combining this data with the other sets of data to draw better conclusions for our final report.
+These findings provide valuable insights into ridership dynamics and identify areas that may benefit from targeted improvements or resource allocation.
+## Results
+
+Similar to lateness, the ridership data was posted on [ArcGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=bf72597e2856402d934fe400e54f2869) for users to explore the visualizations on a map. Ensure that the correct layer is selected on the left and that other layers are turned off. Additionally, select the appropriate timing intervals at the bottom .
+
+Analyzing the ridership data across the system, we observe a **widespread decline in ridership starting in 2020**, corresponding to the onset of COVID-19. This drop is evident at nearly every stop and on nearly every route, with only a few exceptions. These exceptions typically involved stops in essential-service areas or those with limited alternative transit options.
+
+Across the board, the most significant reductions occurred in previously high-traffic clusters. In our **KMeans clustering results**, we consistently saw that **Cluster 3**—the highest-traffic group pre-COVID—experienced a noticeable drop in average ridership post-COVID. For example:
+
+| Cluster | Avg. Traffic (Pre-COVID) | Avg. Traffic (Post-COVID) |
+|--------|---------------------------|----------------------------|
+| 3      | 3584.23                  | 2653.60                  |
+
+This reflects an approximately **25% drop in traffic** for the busiest group of stops. The pattern was similar across other clusters, though the decline was more modest in lower-traffic groups.
+
+Another key insight came from the **normalized KMeans clustering**, which gave more weight to geographic location. This revealed that **urban core areas like Back Bay and Bay Village** consistently remained in the highest ridership clusters both before and after the pandemic, although with reduced volume. Meanwhile, outer neighborhoods and suburban stops saw an even steeper decline and were often grouped into low-ridership clusters post-COVID.
+
+The **absolute change in ridership**, calculated across all stops regardless of location, reinforced this trend, indicating a decrease by around 559 rider per season. From our analysis, there was no evidence of a full recovery to pre-pandemic levels by 2024, suggesting lasting changes in commuting patterns or public behavior. Ridership remains below pre-COVID benchmarks across nearly all metrics.
+
+These findings provide a clear picture of how public transit usage dropped significantly during COVID-19 and has yet to fully rebound. The clustering approach not only quantified these trends but also highlighted **which areas were most affected**, offering potential guidance for where recovery efforts or service adjustments might be most needed.
