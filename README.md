@@ -406,7 +406,7 @@ Below are key patterns that emerged from the full synthesis:
 
 ---
 
-## Synthesis: A System at a Crossroads
+## Synthesis:
 
 Our integrated analysis shows that MBTA’s bus system is:
 - Less reliable in the neighborhoods that need it most,
