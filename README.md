@@ -122,7 +122,7 @@ In regards to KMeans, we got much more promising results. The clustering shows a
 
 But we see that average lateness in the South is higher during 2024 and 2023 compared to 2018 and 2019. It's hard to tell what caused this shift here as well, and we're not confident as to what could've caused geographic shift compared to our theories on overall raised lateness that it would be pure speculation. Hopefully we can make better sense of this data after combining all our findings.
 
-
+---
 
 # Rider Survey Data Integration and Analysis
 
@@ -138,7 +138,6 @@ Because the CTPS dashboard only exposed eight demographic tables as dynamically-
 
 We aligned naming conventions across the two eras by mapping each pre-COVID “measure: subcategory” to our post-COVID `full_category`.
 
----
 
 ## Pre- vs. Post-COVID Category Comparison
 
