@@ -347,76 +347,26 @@ These findings provide a clear picture of how public transit usage dropped signi
 
 ## Conclusion
 
+From our three datasets:
 
-Our three datasets:
+Arrival/Departure Data (2018–2025) – to measure system reliability
+Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID) – to understand who is riding the bus
+Ridership Data (2016–2024) – to observe where and how much the system is used
+From these, a clear post-COVID pattern emerges: more lateness, less ridership, and a rider base increasingly composed of essential, low-income individuals without access to alternative transportation.
 
-1. **Arrival/Departure Data (2018–2025)** – to measure system reliability.  
-2. **Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID)** – to understand who is using the system.  
-3. **Ridership Data (2016–2024)** – to assess how many people are using the system, and where.
+Post-COVID Shift: Fewer Riders, More Delays
+Since the pandemic, overall ridership has declined across many routes.
+At the same time, lateness has increased, particularly in outer neighborhoods where bus reliability was already inconsistent.
+This suggests a feedback loop: discretionary riders—those with cars, flexible work schedules, or higher incomes—are opting out of MBTA buses, while delays grow worse due to increased traffic and lower investment in lower-ridership areas.
+The Rise of the Essential Rider
+Post-COVID survey data shows that those who continue to ride are increasingly low-income, without cars, and dependent on public transit.
+These essential riders are concentrated on the most delayed routes, reinforcing the inequity: those who rely most on the system experience the worst service.
 
-Combining our data and observing how they are related:
-Below are key patterns that emerged from the full synthesis:
+Fewer riders and worsening delays may encourage even more people to avoid buses—putting more cars on the road, increasing traffic, and decreasing bus reliability.
 
+Final Conclusion
 
-### Geographic Inequity: Spatial Clustering of Transit Disadvantage
+Our integrated analysis reveals a system caught in a post-COVID shift:
 
-- Southern neighborhoods show the highest average lateness, confirmed by KMeans and DBScan clustering.
-- These areas overlap with lower ridership volumes and are more likely to be home to transit-dependent populations.
-- In contrast, central zones (e.g., Back Bay) maintain high traffic and relatively better service quality.
-
-**Implication**: There is a service gap, where less affluent or more isolated areas receive less reliable service.
-
----
-
-### Essential vs. Discretionary Riders
-
-- Routes with higher lateness were disproportionately used by:
-  - Low-income individuals
-  - People walking or biking to stops
-  - Riders without alternative transportation modes
-  - Non-English speakers
-
-- Pre- vs. post-COVID survey comparison shows that higher-income and licensed riders left delayed routes, while vulnerable groups remained.
-
-**Implication**: MBTA's bus network is increasingly serving those with no alternatives, while discretionary riders defer to other modes
-
----
-
-### Post-COVID Restructuring
-
-- The COVID-19 pandemic did not only lower ridership, but it changed who rides and where.
-- Transit-dependent users became more concentrated on less reliable route.
-- This reinforces already-existing disparities and increases segregation of mobility by class and language.
-
----
-
-### Modeling Reveals Hidden Bias Without Scaling
-
-- KMeans and DBScan models using unscaled features tended to overweight high-magnitude variables like traffic or lateness.
-- After applying normalization, clusters became more spatially meaningful, revealing underlying patterns tied to location and equity.
-
-**Implication**: Proper preprocessing is critical. Unnormalized models may output less accurate information.
-
----
-
-### Service Quality Misaligned With Rider Need
-
-- The most transit-dependent groups are concentrated on the most delayed routes.
-- Stops with the best service quality tend to cater to more mobile and higher-income riders.
-
----
-
-## Synthesis:
-
-Our integrated analysis shows that MBTA’s bus system is:
-- Less reliable in the neighborhoods that need it most,
-- Serving a shrinking population of essential riders without alternatives, and continues to work against the favor of individuals that need it the most
-
-### Final Conclusion
-
-If MBTA is to fulfill its role as a public good, then:
-
-- Service improvements must be targeted toward underserved, high-lateness, low-ridership areas.
-- Performance metrics must be equity-aware, incorporating demographic disparities alongside operational efficiency.
-- Future planning must take into account post-COVID changes that have permanently reshaped rider behavior.
-
+More delays, due in part to increased road traffic and less use from higher-income users
+Fewer riders, concentrated among those with no alternatives
