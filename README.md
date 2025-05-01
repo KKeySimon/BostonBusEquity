@@ -128,7 +128,7 @@ But we see that average lateness in the South is higher during 2024 and 2023 com
 
 # Rider Survey Data Integration and Analysis
 
-To explore the ridership survery data and determine which rider characteristics are most correlated with bus lateness, we utilized both pre-COVID (2015–2017 survey + 2018 arrival/departure data) and post-COVID (2023) MBTA datasets. This helped us utilize a few of the other sections of this project while determining more rider-specific correlations with late routes to see what groups are the most effected by late buses. 
+To explore the ridership survery data and determine which rider characteristics are most correlated with bus lateness, we utilized both pre-COVID (2015–2017 survey + 2018 arrival/departure data) and post-COVID (2023) MBTA datasets. This helped us utilize a few of the other sections of this project while determining more rider-specific correlations with late routes to see what groups are the most effected by late buses.
 
 ## Data Collection & Processing
 
@@ -140,32 +140,31 @@ Because the CTPS dashboard only exposed eight demographic tables as dynamically-
 
 We aligned naming conventions across the two eras by mapping each pre-COVID “measure: subcategory” to our post-COVID `full_category` for later analysis.
 
-
 ## Pre- vs. Post-COVID Category Comparison
 
 We merged the two long-form tables on `full_category`, grouped by survey measure (Income, Race, Access Mode, etc.), and displayed side-by-side comparison tables.  
 Top changes overall included:
 
-- Trip Purpose: Home-based Work  
-- Trip Frequency: 5 days a week  
-- Fare Type: Monthly Pass  
+- Trip Purpose: Home-based Work
+- Trip Frequency: 5 days a week
+- Fare Type: Monthly Pass
 
 These shifts likely reflect remote-work adoption and economic changes after Covid.
 
 ## Lateness-Weighted Category Analysis (Post-COVID)
 
-1. Compute average lateness per route in 2023 (capping outliers at ±1 hour).  
-2. Select “late” routes whose mean lateness exceeds the citywide average.  
-3. Filter the 2023 rider survey to only those late routes.  
-4. Compute, for each survey measure, the top 3 rider categories by average percent.  
+1. Compute average lateness per route in 2023 (capping outliers at ±1 hour).
+2. Select “late” routes whose mean lateness exceeds the citywide average.
+3. Filter the 2023 rider survey to only those late routes.
+4. Compute, for each survey measure, the top 3 rider categories by average percent.
 5. Visualize with grouped bar charts.
 
 Among the highest on late routes:
 
-- **Access:** Walked or Bicycled  
-- **Alternative Mode:** No  
-- **Income:** Low-income (Yes)  
-- **English Ability:** Never  
+- **Access:** Walked or Bicycled
+- **Alternative Mode:** No
+- **Income:** Low-income (Yes)
+- **English Ability:** Never
 
 These results highlight riders who may be most transit-dependent or face language barriers.
 
@@ -177,17 +176,17 @@ We then ran K-means clustering on the full demographic profile of each late rout
 
 Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure CSVs** to generalize and replicate the same lateness steps:
 
-1. Compute average lateness per route (±1 hr cap).  
-2. Identify late routes (above citywide mean).  
-3. Filter 2015–2017 survey to those routes.  
+1. Compute average lateness per route (±1 hr cap).
+2. Identify late routes (above citywide mean).
+3. Filter 2015–2017 survey to those routes.
 4. Rank the top demographic categories.
 
 **Example top categories in 2018 late routes:**
 
-- **Trip Purpose:** Home-based Work  
-- **Low-income:** No  
-- **Access:** Walked or Bicycled  
-- **License:** Yes  
+- **Trip Purpose:** Home-based Work
+- **Low-income:** No
+- **Access:** Walked or Bicycled
+- **License:** Yes
 
 ![Pre-COVID Lateness Weighted Categories](images/preCovid-rider-survey-table.png)
 
@@ -195,8 +194,8 @@ Because 2015–2017 lacked arrival/departure logs, we used **2018 MBTA departure
 
 To see how these high-lateness profiles shifted:
 
-1. Took the top 2–3 categories per measure from the **2018 late-route survey**.  
-2. Looked up those same `full_category` labels in the **2023 late-route survey**.  
+1. Took the top 2–3 categories per measure from the **2018 late-route survey**.
+2. Looked up those same `full_category` labels in the **2023 late-route survey**.
 3. Computed **percent-point change** (Post – Pre).
 
 We plotted these changes by survey measure/category:
@@ -211,32 +210,35 @@ Because we compared only the top few categories—often one “yes” vs. its co
 
 ### Summary of Findings
 
-- **Remote-work trends:**  
-  - *Trip Purpose:* “Home-based work” share fell from ~37 % in 2018 to ~56 % in 2023 on late routes—reflecting more non-work trips (e.g. errands, medical).  
-  - *Trip Frequency:* 5-day-a-week riders dropped from ~29 % to ~44 % after COVID, confirming fewer daily commuters.
+- **Remote-work trends:**
 
-- **Fare shifts:**  
+  - _Trip Purpose:_ “Home-based work” share fell from ~37 % in 2018 to ~56 % in 2023 on late routes—reflecting more non-work trips (e.g. errands, medical).
+  - _Trip Frequency:_ 5-day-a-week riders dropped from ~29 % to ~44 % after COVID, confirming fewer daily commuters.
+
+- **Fare shifts:**
+
   - **Monthly passes** climbed as the dominant fare product, while pay-per-ride and shorter passes declined—consistent with riders preferring prepaid plans in a more uncertain travel environment.
 
-- **Equity impacts on late routes:**  
-  - **Low-income “Yes”** rose sharply on routes with above-average lateness (from ~17 % to ~82 %), while **Low-income “No”** fell, suggesting the financial vulnerability of riders on unreliable lines.  
+- **Equity impacts on late routes:**
+  - **Low-income “Yes”** rose sharply on routes with above-average lateness (from ~17 % to ~82 %), while **Low-income “No”** fell, suggesting the financial vulnerability of riders on unreliable lines.
   - **Non-English speakers** (“English Ability: Never”) and those **without alternative modes** (“Used Alternative Mode: No”) also increased, highlighting language and mobility barriers.
 
 ### Answering the Spark! Questions
 
-1. **Can we chart changes over TIME?**  
-   - We built **Pre- vs. Post-COVID bar charts** for each demographic category, directly comparing 2018 vs. 2023 percentages.  
+1. **Can we chart changes over TIME?**
+
+   - We built **Pre- vs. Post-COVID bar charts** for each demographic category, directly comparing 2018 vs. 2023 percentages.
    - Although our data has only two “snapshots,” the same pipeline can ingest additional year-specific survey files to produce a true time-series.
 
-2. **Are there disparities in the service levels of different routes?**  
-   - We computed **average lateness per route** (capping outliers ±1 hr) across all trips in 2018 and 2023.  
-   - By flagging routes whose average lateness exceeded the citywide mean, we isolated the “slowest” lines and examined their rider profiles.  
-   - This approach reveals which routes consistently underperform and which rider groups (low-income, limited-English, etc.) bear the brunt of those delays.  
-
+2. **Are there disparities in the service levels of different routes?**
+   - We computed **average lateness per route** (capping outliers ±1 hr) across all trips in 2018 and 2023.
+   - By flagging routes whose average lateness exceeded the citywide mean, we isolated the “slowest” lines and examined their rider profiles.
+   - This approach reveals which routes consistently underperform and which rider groups (low-income, limited-English, etc.) bear the brunt of those delays.
 
 ---
 
 # MBTA Ridership Dataset
+
 ## Overview of the Data
 
 The ridership dataset spans from 2016 to 2024 and includes information on the number of passengers boarding and exiting at each stop. This data allows us to analyze trends in ridership before and after COVID-19. Two separate notebooks were used to process and analyze this data:
@@ -244,11 +246,12 @@ The ridership dataset spans from 2016 to 2024 and includes information on the nu
 1. **Notebook 1:** Focuses on calculating the change in ridership before and after COVID-19 by analyzing boardings.
 2. **Notebook 2:** Focuses on stop-level traffic by combining boarding and exiting data and mapping it to geographic coordinates.
 
-However, in the final report with all notebooks merged, it has been separated into three parts: 
+However, in the final report with all notebooks merged, it has been separated into three parts:
 
-1. **Pre-Covid** ridership at each given stop 
-2. **Post-Covid** ridership at each given stop 
-3. **Absolute change** in ridership if we were to consider all the stops 
+1. **Pre-Covid** ridership at each given stop
+2. **Post-Covid** ridership at each given stop
+3. **Absolute change** in ridership if we were to consider all the stops
+
 ## Data Processing
 
 The data processing involved cleaning and preparing the datasets for analysis. Key steps included:
@@ -269,6 +272,7 @@ These steps ensured that the data was clean, consistent, and ready for further e
 For modeling, we used **KMeans** initially without doing any normalization. In the first **KMeans**, the features include all metrics we have left in the model being just the latitude, longitude, and traffic. Similar to lateness, we see similar results where this clustering is mainly based on traffic.
 
 ![K-Means Clustering Without Normalization](images/ridership_kmeans_1.png)
+
 ### Pre-COVID KMeans Clustering Results (With Normalization)
 
 | Cluster | Average Traffic |
@@ -286,12 +290,14 @@ For modeling, we used **KMeans** initially without doing any normalization. In t
 | 1       | 1803.23         |
 | 2       | 515.62          |
 | 3       | 4572.40         |
+
 ### Observations (Without Normalization)
 
 - **Cluster 3** consistently had the highest traffic in both pre- and post-COVID datasets, indicating areas with the most ridership.
 - The clustering was heavily influenced by traffic values, with geographic factors playing a minimal role due to the lack of normalization.
 - Post-COVID, the average traffic in most clusters decreased, reflecting the overall decline in ridership.
-These results highlighted the need for normalization to ensure that all features (traffic, latitude, and longitude) were equally weighted in the clustering process. This step was crucial for uncovering geographic patterns in addition to traffic-based groupings.
+  These results highlighted the need for normalization to ensure that all features (traffic, latitude, and longitude) were equally weighted in the clustering process. This step was crucial for uncovering geographic patterns in addition to traffic-based groupings.
+
 ### Pre-Covid Table
 
 | Cluster | Average Traffic |
@@ -315,10 +321,15 @@ These results highlighted the need for normalization to ensure that all features
 | 4       | 50.59           |
 | 5       | 712.54          |
 | 6       | 26.83           |
+
 ### Pre COVID DBScan
-![K-Means Clustering after Normalization - pre](images/DBScan(pre-covid).png)
+
+![K-Means Clustering after Normalization - pre](<images/DBScan(pre-covid).png>)
+
 ### Post COVID DBScan
-![K-Means Clustering after normalization -post](images/DBScan(post-COVID).png)
+
+![K-Means Clustering after normalization -post](<images/DBScan(post-COVID).png>)
+
 ### Insights from Clustering
 
 - **High-Traffic Areas:** Cluster 3 consistently exhibited the highest traffic levels in both pre- and post-COVID datasets, primarily concentrated in the **Back Bay and Bay Village areas**.
@@ -326,6 +337,7 @@ These results highlighted the need for normalization to ensure that all features
 - **Impact of COVID-19:** While the overall clustering patterns remained consistent, most clusters experienced a decline in average traffic post-COVID, reflecting the broader reduction in ridership.
 
 These findings provide valuable insights into ridership dynamics and identify areas that may benefit from targeted improvements or resource allocation.
+
 ## Results
 
 Similar to lateness, the ridership data was posted on [ArcGIS](https://bucas.maps.arcgis.com/apps/mapviewer/index.html?webmap=bf72597e2856402d934fe400e54f2869) for users to explore the visualizations on a map. Ensure that the correct layer is selected on the left and that other layers are turned off. Additionally, select the appropriate timing intervals at the bottom .
@@ -335,8 +347,8 @@ Analyzing the ridership data across the system, we observe a **widespread declin
 Across the board, the most significant reductions occurred in previously high-traffic clusters. In our **KMeans clustering results**, we consistently saw that **Cluster 3**—the highest-traffic group pre-COVID—experienced a noticeable drop in average ridership post-COVID. For example:
 
 | Cluster | Avg. Traffic (Pre-COVID) | Avg. Traffic (Post-COVID) |
-|--------|---------------------------|----------------------------|
-| 3      | 3584.23                  | 2653.60                  |
+| ------- | ------------------------ | ------------------------- |
+| 3       | 3584.23                  | 2653.60                   |
 
 This reflects an approximately **25% drop in traffic** for the busiest group of stops. The pattern was similar across other clusters, though the decline was more modest in lower-traffic groups.
 
@@ -346,15 +358,14 @@ The **absolute change in ridership**, calculated across all stops regardless of 
 
 These findings provide a clear picture of how public transit usage dropped significantly during COVID-19 and has yet to fully rebound. The clustering approach not only quantified these trends but also highlighted **which areas were most affected**, offering potential guidance for where recovery efforts or service adjustments might be most needed.
 
-
 ## Conclusion
 
 From our three datasets:
 
-* Arrival/Departure Data (2018–2025) – to measure system reliability
-* Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID) – to understand who is riding the bus
-* Ridership Data (2016–2024) – to observe where and how much the system is used
-From these, a clear post-COVID pattern emerges: more lateness, less ridership, and a rider base increasingly composed of essential, low-income individuals without access to alternative transportation.
+- Arrival/Departure Data (2018–2025) – to measure system reliability
+- Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID) – to understand who is riding the bus
+- Ridership Data (2016–2024) – to observe where and how much the system is used
+  From these, a clear post-COVID pattern emerges: more lateness, less ridership, and a rider base increasingly composed of essential, low-income individuals without access to alternative transportation.
 
 Post-COVID Shift: Fewer Riders, More Delays
 
@@ -375,3 +386,9 @@ Our integrated analysis reveals a system caught in a post-COVID shift:
 
 More delays, due in part to increased road traffic and less use from higher-income users
 Fewer riders, concentrated among those with no alternatives
+
+### Contributions:
+
+- MBTA Bus Arrival Departure Dataset: Simon
+- Rider Survey Data: Rowan, Sarah
+- MBTA Ridership Dataset: David
