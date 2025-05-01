@@ -359,7 +359,9 @@ Post-COVID Shift: Fewer Riders, More Delays
 Since the pandemic, overall ridership has declined across many routes.
 At the same time, lateness has increased, particularly in outer neighborhoods where bus reliability was already inconsistent.
 This suggests a feedback loop: discretionary riders—those with cars, flexible work schedules, or higher incomes—are opting out of MBTA buses, while delays grow worse due to increased traffic and lower investment in lower-ridership areas.
+
 The Rise of the Essential Rider
+
 Post-COVID survey data shows that those who continue to ride are increasingly low-income, without cars, and dependent on public transit.
 These essential riders are concentrated on the most delayed routes, reinforcing the inequity: those who rely most on the system experience the worst service.
 
