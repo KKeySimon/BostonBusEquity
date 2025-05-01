@@ -24,7 +24,7 @@ python survey_data.py > acutal_survey_analysis_output.txt
 # Compare outputs
 echo "Comparing survey data output..."
 if diff -q acutal_survey_analysis_output.txt expected_survey_analysis_output.txt > /dev/null; then
-    echo "✅ Output matches expected output."
+    echo "✅ Ougit ptput matches expected output."
 else
     echo "❌ Output differs from expected output. See differences below:"
     diff acutal_survey_analysis_output.txt expected_survey_analysis_output.txt
