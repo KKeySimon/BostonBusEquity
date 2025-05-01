@@ -10,10 +10,10 @@ import os
 
 # all the export files in 2015-2017
 precovid_folder = "ridership_data/2015-2017-tables"
-print("Folder contents:", os.listdir(precovid_folder))
+#print("Folder contents:", os.listdir(precovid_folder))
 file_pattern = os.path.join(precovid_folder, "*.xlsx")
 file_paths   = sorted(glob.glob(file_pattern))
-print("Found Excel files:", file_paths)
+#print("Found Excel files:", file_paths)
 
 df_list = [pd.read_excel(file) for file in file_paths]
 df_pre = pd.concat(df_list, ignore_index=True)
@@ -419,10 +419,10 @@ display(cluster_summary)
 
 #pre covid lateness using the survey dataset 2015-2017 and the departure arrivals from 2018 (closest dataset)
 precovid_folder = "ridership_data/2015-2017-tables"
-print("Folder contents:", os.listdir(precovid_folder))
+#print("Folder contents:", os.listdir(precovid_folder))
 file_pattern = os.path.join(precovid_folder, "*export.xlsx")
 file_paths   = sorted(glob.glob(file_pattern))
-print("Found Excel files:", file_paths)
+#print("Found Excel files:", file_paths)
 
 df_list = [pd.read_excel(file) for file in file_paths]
 df_pre = pd.concat(df_list, ignore_index=True)
@@ -434,7 +434,7 @@ df_analysis2 = df_pre[df_pre["Route"].isin(above_avg_routes_2018["route_id"])]
 
 #pre covid lateness using the survey dataset 2015-2017 and the departure arrivals from 2018 (closest dataset)
 precovid_folder = "ridership_data/2015-2017-tables"
-print("Folder contents:", os.listdir(precovid_folder))
+#print("Folder contents:", os.listdir(precovid_folder))
 file_pattern = os.path.join(precovid_folder, "*export.xlsx")
 file_paths   = sorted(glob.glob(file_pattern))
 
