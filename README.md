@@ -349,12 +349,13 @@ These findings provide a clear picture of how public transit usage dropped signi
 
 From our three datasets:
 
-Arrival/Departure Data (2018–2025) – to measure system reliability
-Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID) – to understand who is riding the bus
-Ridership Data (2016–2024) – to observe where and how much the system is used
+* Arrival/Departure Data (2018–2025) – to measure system reliability
+* Rider Survey Data (2015–2017 pre-COVID, and 2023 post-COVID) – to understand who is riding the bus
+* Ridership Data (2016–2024) – to observe where and how much the system is used
 From these, a clear post-COVID pattern emerges: more lateness, less ridership, and a rider base increasingly composed of essential, low-income individuals without access to alternative transportation.
 
 Post-COVID Shift: Fewer Riders, More Delays
+
 Since the pandemic, overall ridership has declined across many routes.
 At the same time, lateness has increased, particularly in outer neighborhoods where bus reliability was already inconsistent.
 This suggests a feedback loop: discretionary riders—those with cars, flexible work schedules, or higher incomes—are opting out of MBTA buses, while delays grow worse due to increased traffic and lower investment in lower-ridership areas.
