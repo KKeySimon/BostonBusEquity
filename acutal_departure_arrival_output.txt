@@ -1,0 +1,7 @@
+['sample_departure_arrival.csv']
+Processing sample_departure_arrival.csv in chunks...
+Q1: Stop average lateness by year
+2021: 212.99
+
+Q2: Route average lateness by year
+2021: 212.99
