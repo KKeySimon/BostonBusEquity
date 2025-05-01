@@ -314,7 +314,7 @@ These results highlighted the need for normalization to ensure that all features
 | 5       | 712.54          |
 | 6       | 26.83           |
 ### Pre COVID DBScan
-![K-Means Clustering after Normalization - pre](images/DBScan(pre-COVID).png)
+![K-Means Clustering after Normalization - pre](images/DBScan(pre-covid).png)
 ### Post COVID DBScan
 ![K-Means Clustering after normalization -post](images/DBScan(post-COVID).png)
 ### Insights from Clustering
