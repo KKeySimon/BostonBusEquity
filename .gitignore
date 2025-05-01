@@ -5,3 +5,5 @@ scraped_survey_data/
 !ridership_data/2015-2017-tables/*export.xslx
 !ridership_data/scraped_survey_data/
 !test_data/*.csv
+!test_data/ridership_2018_sample.csv
+!test_data/ridership_2022_sample.csv
