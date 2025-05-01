@@ -1,0 +1,20 @@
+time_period  route_id     2018     2022  absolute_change
+0                   1  17513.1  13818.9          -3694.2
+The average percent change across all routes is: -3694.20
+   route_id stop_id  traffic   stop_lat   stop_lon
+0         1       1     73.3  42.330957 -71.082754
+1         1       2    152.4  42.332324 -71.081252
+2         1       6     69.2  42.332016 -71.079576
+3         1      57   1390.3  42.333825 -71.073541
+4         1      58   1835.0  42.334948 -71.074931
+Low traffic outliers (below 0):
+Empty DataFrame
+Columns: [route_id, stop_id, traffic, stop_lat, stop_lon]
+Index: []
+
+High traffic outliers (above 1847.025):
+    route_id stop_id  traffic   stop_lat   stop_lon
+8          1      64   3552.7  42.329789 -71.083887
+28         1      93   3409.2  42.348005 -71.088033
+34         1     102   2622.4  42.365291 -71.103404
+40         1     110   3329.6  42.373111 -71.117653

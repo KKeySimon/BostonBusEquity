@@ -4,6 +4,8 @@ YouTube Presentation Video
 
 https://youtu.be/_so4D3_YKP0
 
+Read final.ipynb in regards to how we got to the data mentioned in our final report and for testing.
+
 ## MBTA Bus Arrival Departure Dataset
 
 ### Basic Introduction of Datasets
